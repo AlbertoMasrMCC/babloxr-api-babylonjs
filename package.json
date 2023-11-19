@@ -1,6 +1,6 @@
 {
   "name": "babloxr-api-babylonjs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "API with code for BabylonJS to use with babloxr-api",
   "main": "src/index.js",
   "dependencies": {
