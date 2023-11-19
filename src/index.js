@@ -387,7 +387,8 @@ function createVideo(heigh, width, title, url, scene) {
         loop: false,
         autoPlay: false,
         muted: true,
-        autoUpdateTexture: true
+        autoUpdateTexture: true,
+        crossOrigin: "anonymous"
     });
 
     videoTexture.onLoadObservable.add(() => {
