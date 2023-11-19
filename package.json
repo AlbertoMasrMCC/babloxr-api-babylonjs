@@ -1,0 +1,20 @@
+{
+  "name": "babloxr-api-babylonjs",
+  "version": "1.0.0",
+  "description": "API with code for BabylonJS to use with babloxr-api",
+  "main": "src/index.js",
+  "dependencies": {
+    "@babylonjs/core": "^6.30.0",
+    "@babylonjs/gui": "^6.30.0",
+    "@babylonjs/loaders": "^6.30.0",
+    "@babylonjs/materials": "^6.30.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["babylonjs", "babylon", "xr", "webxr", "api", "babloxr"],
+  "author": "Manuel Alberto Sotelo Rivas <manuel.sr@culiacan.tecnm.mx>",
+  "license": "MIT",
+  "homepage": "https://github.com/AlbertoMasrMCC/babloxr-api-babylonjs",
+  "preferGlobal": true
+}
