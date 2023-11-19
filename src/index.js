@@ -412,3 +412,5 @@ function createVideo(heigh, width, title, url, scene) {
     return videoMesh;
 
 }
+
+export { createWindow, createTest, createVideo };
