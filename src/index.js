@@ -381,7 +381,7 @@ function createVideo(heigh, width, title, url, scene) {
     }, scene);
 
     const videoMaterial = new BABYLON.StandardMaterial(`videoMaterial_${title}`, scene);
-    videoMaterial.diffuseColor = new BABYLON.Color3.White();
+    videoMaterial.diffuseColor = BABYLON.Color3.White();
 
     const videoTexture = new BABYLON.VideoTexture(`videoTexture_${title}`, url, scene, true, false, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
         loop: false,
@@ -396,7 +396,7 @@ function createVideo(heigh, width, title, url, scene) {
 
         videoMaterial.diffuseTexture = videoTexture;
         videoMaterial.roughness = 1;
-        videoMaterial.emissiveColor = new BABYLON.Color3.White();
+        videoMaterial.emissiveColor = BABYLON.Color3.White();
     
         videoMesh.material = videoMaterial;
         videoMesh.xrPickable = true;
