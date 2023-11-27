@@ -414,4 +414,178 @@ function createVideo(heigh, width, title, url, scene) {
 
 }
 
-export { createWindow, createTest, createVideo };
+async function createXR(ground, skybox, scene) {
+
+    if(!ground || !skybox) {
+
+        const env = scene.createDefaultEnvironment();
+
+        ground = !ground ? env.ground : ground;
+        skybox = !skybox ? env.skybox : skybox;
+
+    }
+
+    let inmersive_state = "inline"
+    let reference_floor = "local-floor"
+
+    let avaliableVR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-vr")
+    let avaliableAR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-ar")
+
+    console.log("AR mode avaliable: " + avaliableAR)
+    console.log("VR mode avaliable: " + avaliableVR)
+
+    if (avaliableVR) {
+
+        inmersive_state = "immersive-vr"
+
+        if (avaliableAR) {
+
+            inmersive_state = "immersive-ar"
+
+        }
+
+    }
+
+    const xr = scene.createDefaultXRExperienceAsync({
+
+        disableDefaultUI: true,
+        disableNearInteraction: true,
+        disablePointerSelection: false,
+        disableTeleportation: true,
+        optionalFeatures: true,
+
+        floorMeshes: [ground],
+
+        uiOptions: {
+
+            sessionMode: inmersive_state,
+            referenceSpaceType: reference_floor
+
+        },
+
+        inputOptions: {
+        
+            doNotLoadControllerMeshes: false,
+        
+        }
+
+    })
+
+    return xr.then((xrExperience) => {
+
+        xrExperience.baseExperience.onStateChangedObservable.add((XRstate) => {
+
+            if (avaliableVR) {
+
+                switch (XRstate) {
+
+                    case BABYLON.WebXRState.IN_XR:
+                        // XR is initialized and already submitted one frame
+                    break
+                    case BABYLON.WebXRState.ENTERING_XR:
+                        // xr is being initialized, enter XR request was made
+                    break
+                    case BABYLON.WebXRState.EXITING_XR:
+                        // xr exit request was made. not yet done.
+                    break
+                    case BABYLON.WebXRState.NOT_IN_XR:
+                        // self explanatory - either out or not yet in XR
+                    break
+
+                }
+
+            }
+
+            if (avaliableAR) {
+
+                switch (XRstate) {
+
+                    case BABYLON.WebXRState.IN_XR:
+                        // XR is initialized and already submitted one frame
+                    break
+                    case BABYLON.WebXRState.ENTERING_XR:
+                        // xr is being initialized, enter XR request was made
+                        if (ground) {
+
+                            ground.visibility = 0
+
+                        }
+
+                        if (skybox) {
+
+                            skybox.isVisible = false
+
+                        }
+
+                    break
+                    case BABYLON.WebXRState.EXITING_XR:
+                        // xr exit request was made. not yet done.
+                    break
+                    case BABYLON.WebXRState.NOT_IN_XR:
+                        // self explanatory - either out or not yet in XR
+                        if (ground) {
+
+                            ground.visibility = 1
+
+                        }
+
+                        if (skybox) {
+
+                            skybox.isVisible = true
+
+                        }
+                        
+                    break
+
+                }
+
+            }
+
+        })
+
+        var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene)
+
+        var btnModoXR = GUI.Button.CreateSimpleButton("btnModoXR", "Entrar a modo AR")
+        btnModoXR.width = "40%"
+        btnModoXR.height = "10%"
+        btnModoXR.cornerRadius = 20;
+        btnModoXR.color = "white";
+        btnModoXR.thickness = 4;
+        btnModoXR.background = "black";
+        btnModoXR.alpha = 0.5;
+        btnModoXR.onPointerEnterObservable.add(function () {
+            btnModoXR.background = "white";
+            btnModoXR.color = "black";
+        });
+        btnModoXR.onPointerOutObservable.add(function () {
+            btnModoXR.background = "black";
+            btnModoXR.color = "white";
+        });
+        btnModoXR.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT
+        btnModoXR.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
+
+        btnModoXR.onPointerUpObservable.add(function () {
+
+            if (xrExperience.baseExperience.state === BABYLON.WebXRState.NOT_IN_XR) {
+
+                xrExperience.baseExperience.enterXRAsync(inmersive_state, reference_floor)
+                btnModoXR.textBlock.text = "Entrar a modo VR"
+
+            } else if (xrExperience.baseExperience.state === BABYLON.WebXRState.IN_XR) {
+
+                xrExperience.baseExperience.exitXRAsync()
+                btnModoXR.textBlock.text = "Entrar a modo AR"
+
+            }
+
+        })
+
+        advancedTextureFullScreen.addControl(btnModoXR)
+
+        return [xrExperience, btnModoXR]
+
+    })
+
+}
+
+export { createWindow, createTest, createVideo, createXR };
