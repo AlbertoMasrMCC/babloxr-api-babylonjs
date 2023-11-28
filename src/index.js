@@ -471,7 +471,11 @@ async function createXR(ground, skybox, scene) {
 
     })
 
+    console.log(xr);
+
     return xr.then((xrExperience) => {
+
+        console.log(xrExperience)
 
         xrExperience.baseExperience.onStateChangedObservable.add((XRstate) => {
 
