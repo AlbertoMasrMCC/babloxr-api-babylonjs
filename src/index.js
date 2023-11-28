@@ -418,7 +418,7 @@ async function createXR(ground, skybox, scene) {
 
     if(!ground || !skybox) {
 
-        const env = scene.createDefaultEnvironment();
+        const env = await scene.createDefaultEnvironment();
 
         ground = !ground ? env.ground : ground;
         skybox = !skybox ? env.skybox : skybox;
@@ -446,7 +446,7 @@ async function createXR(ground, skybox, scene) {
 
     }
 
-    const xr = scene.createDefaultXRExperienceAsync({
+    const xr = await scene.createDefaultXRExperienceAsync({
 
         disableDefaultUI: true,
         disableNearInteraction: true,
@@ -473,81 +473,81 @@ async function createXR(ground, skybox, scene) {
 
     console.log(xr);
 
-    return xr.then((xrExperience) => {
+    const xrExperience = await xr;
 
-        console.log(xrExperience)
+    console.log(xrExperience)
 
-        // xrExperience.baseExperience.onStateChangedObservable.add((XRstate) => {
+    xrExperience.baseExperience.onStateChangedObservable.add((XRstate) => {
 
-        //     if (avaliableVR) {
+        if (avaliableVR) {
 
-        //         switch (XRstate) {
+            switch (XRstate) {
 
-        //             case BABYLON.WebXRState.IN_XR:
-        //                 // XR is initialized and already submitted one frame
-        //             break
-        //             case BABYLON.WebXRState.ENTERING_XR:
-        //                 // xr is being initialized, enter XR request was made
-        //             break
-        //             case BABYLON.WebXRState.EXITING_XR:
-        //                 // xr exit request was made. not yet done.
-        //             break
-        //             case BABYLON.WebXRState.NOT_IN_XR:
-        //                 // self explanatory - either out or not yet in XR
-        //             break
+                case BABYLON.WebXRState.IN_XR:
+                    // XR is initialized and already submitted one frame
+                break
+                case BABYLON.WebXRState.ENTERING_XR:
+                    // xr is being initialized, enter XR request was made
+                break
+                case BABYLON.WebXRState.EXITING_XR:
+                    // xr exit request was made. not yet done.
+                break
+                case BABYLON.WebXRState.NOT_IN_XR:
+                    // self explanatory - either out or not yet in XR
+                break
 
-        //         }
+            }
 
-        //     }
+        }
 
-        //     if (avaliableAR) {
+        if (avaliableAR) {
 
-        //         switch (XRstate) {
+            switch (XRstate) {
 
-        //             case BABYLON.WebXRState.IN_XR:
-        //                 // XR is initialized and already submitted one frame
-        //             break
-        //             case BABYLON.WebXRState.ENTERING_XR:
-        //                 // xr is being initialized, enter XR request was made
-        //                 if (ground) {
+                case BABYLON.WebXRState.IN_XR:
+                    // XR is initialized and already submitted one frame
+                break
+                case BABYLON.WebXRState.ENTERING_XR:
+                    // xr is being initialized, enter XR request was made
+                    if (ground) {
 
-        //                     ground.visibility = 0
+                        ground.visibility = 0
 
-        //                 }
+                    }
 
-        //                 if (skybox) {
+                    if (skybox) {
 
-        //                     skybox.isVisible = false
+                        skybox.isVisible = false
 
-        //                 }
+                    }
 
-        //             break
-        //             case BABYLON.WebXRState.EXITING_XR:
-        //                 // xr exit request was made. not yet done.
-        //             break
-        //             case BABYLON.WebXRState.NOT_IN_XR:
-        //                 // self explanatory - either out or not yet in XR
-        //                 if (ground) {
+                break
+                case BABYLON.WebXRState.EXITING_XR:
+                    // xr exit request was made. not yet done.
+                break
+                case BABYLON.WebXRState.NOT_IN_XR:
+                    // self explanatory - either out or not yet in XR
+                    if (ground) {
 
-        //                     ground.visibility = 1
+                        ground.visibility = 1
 
-        //                 }
+                    }
 
-        //                 if (skybox) {
+                    if (skybox) {
 
-        //                     skybox.isVisible = true
+                        skybox.isVisible = true
 
-        //                 }
-                        
-        //             break
+                    }
+                    
+                break
 
-        //         }
+            }
 
-        //     }
+        }
 
-        // })
+    })
 
-        var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene)
+    var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene)
 
         var btnModoXR = GUI.Button.CreateSimpleButton("btnModoXR", "Entrar a modo AR")
         btnModoXR.width = "40%"
@@ -587,8 +587,6 @@ async function createXR(ground, skybox, scene) {
         advancedTextureFullScreen.addControl(btnModoXR)
 
         return [xrExperience, btnModoXR]
-
-    })
 
 }
 
