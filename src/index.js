@@ -414,7 +414,7 @@ function createVideo(heigh, width, title, url, scene) {
 
 }
 
-export async function createXR(ground, skybox, scene) {
+async function createXR(ground, skybox, scene) {
 
     let avaliableVR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-vr")
     let avaliableAR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-ar")
