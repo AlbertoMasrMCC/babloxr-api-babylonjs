@@ -9,22 +9,21 @@ const LINKED_CENTER = 5;
 
 /** 
  * @param {number} width - Ancho de la ventana en pixeles
+ * @param {number} heighW - Altura de la ventana en pixeles
  * @param {string} title - Titulo de la ventana
  * @param {BABYLON.Scene} scene - Escena de babylon
  * @returns {BABYLON.Mesh} - Malla de la barra superior
 **/
-const createBar = (width, title, scene) => {
-
-    const heighBar = 150;
+const createBar = (width, heighW, title, scene) => {
 
     const barMesh = BABYLON.MeshBuilder.CreatePlane(`barMesh_${title}`, {
-        height: heighBar * 0.01, 
+        height: heighW * 0.01 / 4, 
         width: width * 0.01, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
     const barTexture = GUI.AdvancedDynamicTexture.CreateForMesh(barMesh);
-    barTexture.scaleTo(width, heighBar);
+    barTexture.scaleTo(width, heighW);
 
     const barRectangle = new GUI.Rectangle(`barRectangle_${title}`);
     barRectangle.cornerRadius = 20;
@@ -40,7 +39,8 @@ const createBar = (width, title, scene) => {
     barText.fontFamily = "Helvetica";
     barText.text = title;
     barText.color = "white";
-    barText.fontSize = 50;
+    barText.fontSize = "20%";
+    barText.textWrapping = true;
     barText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 
     barGrid.addControl(barText, 0, 0);
@@ -54,17 +54,16 @@ const createBar = (width, title, scene) => {
 
 /**
  * @param {number} width - Ancho de la ventana en pixeles
+ * @param {number} heighW - Altura de la ventana en pixeles
  * @param {BABYLON.Mesh} videoMesh - Malla del video que se eliminara al cerrar la ventana
  * @param {BABYLON.VideoTexture} videoTexture - Textura del video que se pausara o reproducira
  * @param {BABYLON.Scene} scene - Escena de babylon
  * @returns {BABYLON.Mesh} - Malla de los botones de control
 **/
-const createControls = (width, videoMesh, videoTexture, scene) => {
-
-    const heighBar = 150;
+const createControls = (width, heighW, videoMesh, videoTexture, scene) => {
 
     const botonesMesh = BABYLON.MeshBuilder.CreatePlane(`botonesMesh`, {
-        height: heighBar * 0.01, 
+        height: heighW * 0.01 / 4, 
         width: width * 0.01, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
@@ -79,17 +78,17 @@ const createControls = (width, videoMesh, videoTexture, scene) => {
     playButton.textBlock.text = "Reproducir";
     playButton.color = "white";
     playButton.background = "green";
-    playButton.fontSize = 75;
-    playButton.marginTop = "10%";
-    playButton.marginBottom = "10%";
+    playButton.fontSize = "10%";
+    playButton.textWrapping = true;
+    playButton.fontFamily = "Helvetica";
 
     const omiteButton = GUI.Button.CreateSimpleButton(`omiteButton`);
     omiteButton.textBlock.text = "Omitir";
     omiteButton.color = "white";
     omiteButton.background = "red";
-    omiteButton.fontSize = 75;
-    omiteButton.marginTop = "10%";
-    omiteButton.marginBottom = "10%";
+    omiteButton.fontSize = "10%";
+    omiteButton.textWrapping = true;
+    omiteButton.fontFamily = "Helvetica";
 
     playButton.onPointerClickObservable.add(() => {
 
@@ -109,6 +108,8 @@ const createControls = (width, videoMesh, videoTexture, scene) => {
     });
 
     omiteButton.onPointerClickObservable.add(() => {
+        videoTexture.video.play();
+        videoTexture.video.muted = false;
         videoMesh.dispose();
         botonesMesh.dispose();
     });
@@ -174,7 +175,7 @@ const linkMeshes = (meshParent, meshChild, position = LINKED_CENTER) => {
 **/
 function createWindow(heigh, width, title, text, showButton, scene) {
 
-    const barMesh = createBar(width, title, scene);
+    const barMesh = createBar(width, heigh, title, scene);
 
     const windowMesh = BABYLON.MeshBuilder.CreatePlane(`windowMesh_${title}`, {
         height: heigh * 0.01, 
@@ -246,7 +247,7 @@ function createWindow(heigh, width, title, text, showButton, scene) {
 **/
 function createTest(heigh, width, title, question, correct_answer, correct_message, incorrect_message, scene, ...answers) {
 
-    const barMesh = createBar(width, title, scene);
+    const barMesh = createBar(width, heigh, title, scene);
 
     const testMesh = BABYLON.MeshBuilder.CreatePlane(`testMesh_${title}`, {
         height: heigh * 0.01, 
@@ -393,7 +394,7 @@ function createVideo(heigh, width, title, url, scene) {
 
     videoTexture.onLoadObservable.add(() => {
 
-        const barMesh = createBar(width, title, scene);
+        const barMesh = createBar(width, heigh, title, scene);
 
         videoMaterial.diffuseTexture = videoTexture;
         videoMaterial.roughness = 1;
@@ -402,7 +403,7 @@ function createVideo(heigh, width, title, url, scene) {
         videoMesh.material = videoMaterial;
         videoMesh.xrPickable = true;
     
-        const controls = createControls(width, videoMesh, videoTexture, scene);
+        const controls = createControls(width, heigh, videoMesh, videoTexture, scene);
     
         linkMeshes(videoMesh, barMesh, LINKED_UP);
         linkMeshes(videoMesh, controls, LINKED_DOWN);
