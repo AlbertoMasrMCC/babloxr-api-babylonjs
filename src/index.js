@@ -415,6 +415,39 @@ function createVideo(heigh, width, title, url, scene) {
 
 }
 
+/**
+ * Creates an audio object with the specified parameters.
+ * @param {string} name - The name of the audio object.
+ * @param {string} url - The URL of the audio file.
+ * @param {BABYLON.Scene} scene - The scene in which the audio object will be created.
+ * @param {boolean} autoPlay - Determines whether the audio should start playing automatically.
+ * @param {boolean} loop - Determines whether the audio should loop.
+ * @param {boolean} spatialSound - Determines whether the audio should be treated as spatial sound.
+ * @param {number} maxDistance - The maximum distance at which the audio can be heard.
+ * @returns {Promise<BABYLON.Sound>} A promise that resolves with the created audio object.
+ */
+async function createAudio(name, url, scene, autoPlay, loop, spatialSound, maxDistance) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            autoplay: autoPlay,
+            loop: loop,
+            spatialSound: spatialSound,
+            maxDistance: maxDistance
+        };
+
+        const sound = new BABYLON.Sound(name, url, scene, () => {
+            resolve(sound);
+        }, options);
+    });
+}
+
+/**
+ * Creates an XR experience with the given ground, skybox, and scene.
+ * @param {BABYLON.AbstractMesh} ground - The ground mesh for the XR experience.
+ * @param {BABYLON.AbstractMesh} skybox - The skybox mesh for the XR experience.
+ * @param {BABYLON.Scene} scene - The scene in which the XR experience will be created.
+ * @returns {Promise<[BABYLON.WebXRExperienceHelper, GUI.Button]>} A promise that resolves to an array containing the XR experience helper and the XR mode button.
+ */
 async function createXR(ground, skybox, scene) {
 
     let avaliableVR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-vr")
@@ -592,4 +625,4 @@ async function createXR(ground, skybox, scene) {
 
 }
 
-export { createWindow, createTest, createVideo, createXR };
+export { createWindow, createTest, createVideo, createXR, createAudio };
