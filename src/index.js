@@ -366,6 +366,18 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
 }
 
 /**
+ * Creates a new image texture from the given URL.
+ * @param {string} url - The URL of the image.
+ * @param {BABYLON.Scene} scene - The scene in which the texture will be used.
+ * @returns {Promise<BABYLON.Texture>} - A promise that resolves to the created texture.
+ */
+async function createImage(url, scene) {
+    const texture = new BABYLON.Texture(url, scene);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    return texture;
+}
+
+/**
  * 
  * @param {number} heigh - Altura de la ventana en pixeles
  * @param {number} width - Ancho de la ventana en pixeles
@@ -625,4 +637,4 @@ async function createXR(ground, skybox, scene) {
 
 }
 
-export { createWindow, createTest, createVideo, createXR, createAudio };
+export { createWindow, createTest, createVideo, createXR, createAudio, createImage };
