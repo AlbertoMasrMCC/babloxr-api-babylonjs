@@ -60,21 +60,21 @@ const createBar = (width, heighW, title, scene) => {
  * @param {BABYLON.Scene} scene - Escena de babylon
  * @returns {BABYLON.Mesh} - Malla de los botones de control
 **/
-const createControls = (width, heighW, videoMesh, videoTexture, scene) => {
+const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
 
     const botonesMesh = BABYLON.MeshBuilder.CreatePlane(`botonesMesh`, {
-        height: heighW * 0.01 / 4, 
+        height: heightW * 0.01 / 4, 
         width: width * 0.01, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
-    const botonTexture = GUI.AdvancedDynamicTexture.CreateForMesh(botonesMesh);
+    const botonTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(botonesMesh);
 
-    const botonsGrid = new GUI.Grid(`botonsGrid`);
+    const botonsGrid = new BABYLON.GUI.Grid(`botonsGrid`);
     botonsGrid.addColumnDefinition(0.5);
     botonsGrid.addColumnDefinition(0.5);
 
-    const playButton = GUI.Button.CreateSimpleButton(`playButton`);
+    const playButton = BABYLON.GUI.Button.CreateSimpleButton(`playButton`);
     playButton.textBlock.text = "Reproducir";
     playButton.color = "white";
     playButton.background = "green";
@@ -82,7 +82,7 @@ const createControls = (width, heighW, videoMesh, videoTexture, scene) => {
     playButton.textWrapping = true;
     playButton.fontFamily = "Helvetica";
 
-    const omiteButton = GUI.Button.CreateSimpleButton(`omiteButton`);
+    const omiteButton = BABYLON.GUI.Button.CreateSimpleButton(`omiteButton`);
     omiteButton.textBlock.text = "Omitir";
     omiteButton.color = "white";
     omiteButton.background = "red";
@@ -108,8 +108,8 @@ const createControls = (width, heighW, videoMesh, videoTexture, scene) => {
     });
 
     omiteButton.onPointerClickObservable.add(() => {
-        videoTexture.video.play();
-        videoTexture.video.muted = false;
+        videoTexture.video.pause();
+        videoTexture.video.muted = true;
         videoMesh.dispose();
         botonesMesh.dispose();
     });
@@ -372,9 +372,13 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
  * @returns {Promise<BABYLON.Texture>} - A promise that resolves to the created texture.
  */
 async function createImage(url, scene) {
-    const texture = new BABYLON.Texture(url, scene);
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    return texture;
+    return new Promise((resolve, reject) => {
+        const texture = new BABYLON.Texture(url, scene);
+        
+        texture.onLoadObservable.add(() => {
+            resolve(texture);
+        });
+    });
 }
 
 /**
@@ -439,17 +443,27 @@ function createVideo(heigh, width, title, url, scene) {
  * @returns {Promise<BABYLON.Sound>} A promise that resolves with the created audio object.
  */
 async function createAudio(name, url, scene, autoPlay, loop, spatialSound, maxDistance) {
-    return new Promise((resolve, reject) => {
-        const options = {
-            autoplay: autoPlay,
-            loop: loop,
-            spatialSound: spatialSound,
-            maxDistance: maxDistance
-        };
 
-        const sound = new BABYLON.Sound(name, url, scene, () => {
+    const urlSplit = url.split('?');
+
+    const newURL = url + urlSplit[0];
+
+    const options = {
+        autoplay: autoPlay,
+        loop: loop,
+        spatialSound: spatialSound,
+        maxDistance: maxDistance
+    };
+
+    return new Promise((resolve, reject) => {
+        
+        const sound = new BABYLON.Sound(name, newURL, scene, () => {
             resolve(sound);
         }, options);
+
+        sound.onError = (errorCode, errorInfo) => {
+            reject(new Error(`Failed to load audio: ${errorInfo}`));
+        };
     });
 }
 
