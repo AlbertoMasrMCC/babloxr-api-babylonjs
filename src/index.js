@@ -15,7 +15,6 @@ const LINKED_CENTER = 5;
  * @returns {BABYLON.Mesh} - Malla de la barra superior
 **/
 const createBar = (width, heighW, title, scene) => {
-
     const barMesh = BABYLON.MeshBuilder.CreatePlane(`barMesh_${title}`, {
         height: heighW * 0.01 / 4, 
         width: width * 0.01, 
@@ -49,7 +48,6 @@ const createBar = (width, heighW, title, scene) => {
     barTexture.addControl(barRectangle);
 
     return barMesh;
-
 }
 
 /**
@@ -61,20 +59,19 @@ const createBar = (width, heighW, title, scene) => {
  * @returns {BABYLON.Mesh} - Malla de los botones de control
 **/
 const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
-
     const botonesMesh = BABYLON.MeshBuilder.CreatePlane(`botonesMesh`, {
         height: heightW * 0.01 / 4, 
         width: width * 0.01, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
-    const botonTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(botonesMesh);
+    const botonTexture = GUI.AdvancedDynamicTexture.CreateForMesh(botonesMesh);
 
-    const botonsGrid = new BABYLON.GUI.Grid(`botonsGrid`);
+    const botonsGrid = new GUI.Grid(`botonsGrid`);
     botonsGrid.addColumnDefinition(0.5);
     botonsGrid.addColumnDefinition(0.5);
 
-    const playButton = BABYLON.GUI.Button.CreateSimpleButton(`playButton`);
+    const playButton = GUI.Button.CreateSimpleButton(`playButton`);
     playButton.textBlock.text = "Reproducir";
     playButton.color = "white";
     playButton.background = "green";
@@ -82,7 +79,7 @@ const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
     playButton.textWrapping = true;
     playButton.fontFamily = "Helvetica";
 
-    const omiteButton = BABYLON.GUI.Button.CreateSimpleButton(`omiteButton`);
+    const omiteButton = GUI.Button.CreateSimpleButton(`omiteButton`);
     omiteButton.textBlock.text = "Omitir";
     omiteButton.color = "white";
     omiteButton.background = "red";
@@ -120,7 +117,6 @@ const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
     botonTexture.addControl(botonsGrid);
 
     return botonesMesh;
-
 }
 
 /**
@@ -130,7 +126,6 @@ const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
  * @returns {void} - No retorna nada
 **/
 const linkMeshes = (meshParent, meshChild, position = LINKED_CENTER) => {
-    
     let ajust_pos = null;
     let change_axis = null;
 
@@ -174,7 +169,6 @@ const linkMeshes = (meshParent, meshChild, position = LINKED_CENTER) => {
  * @returns {BABYLON.Mesh} - Malla de la ventana
 **/
 function createWindow(heigh, width, title, text, showButton, scene) {
-
     const barMesh = createBar(width, heigh, title, scene);
 
     const windowMesh = BABYLON.MeshBuilder.CreatePlane(`windowMesh_${title}`, {
@@ -230,7 +224,6 @@ function createWindow(heigh, width, title, text, showButton, scene) {
     linkMeshes(windowMesh, barMesh, LINKED_UP);
 
     return windowMesh;
-
 }
 
 /**
@@ -246,7 +239,6 @@ function createWindow(heigh, width, title, text, showButton, scene) {
  * @returns {BABYLON.Mesh} - Malla de la ventana
 **/
 function createTest(heigh, width, title, question, correct_answer, correct_message, incorrect_message, scene, ...answers) {
-
     const barMesh = createBar(width, heigh, title, scene);
 
     const testMesh = BABYLON.MeshBuilder.CreatePlane(`testMesh_${title}`, {
@@ -268,7 +260,6 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
     testGrid.addRowDefinition(0.8, false);
     testGrid.addRowDefinition(0.3, false);
 
-    // Pregunta
     const testText = new GUI.TextBlock(`testText_${title}`);
     testText.fontFamily = "Helvetica";
     testText.text = question;
@@ -276,7 +267,6 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
     testText.fontSize = 70;
     testText.textWrapping = true;
 
-    // Respuestas
     const testAnswersGrid = new GUI.Grid(`testAnswersGrid_${title}`);
     testAnswersGrid.addRowDefinition(0.2, false);
     testAnswersGrid.addRowDefinition(0.8, false);
@@ -313,7 +303,6 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
 
     }
 
-    // BotÃ³n de envÃ­o
     const testSubmitButton = GUI.Button.CreateSimpleButton(`testSubmitButton_${title}`, "Enviar");
     testSubmitButton.fontFamily = "Helvetica";
     testSubmitButton.color = "black";
@@ -362,7 +351,6 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
     linkMeshes(testMesh, barMesh, LINKED_UP);
 
     return testMesh;
-
 }
 
 /**
@@ -390,7 +378,6 @@ async function createImage(url, scene) {
  * @returns {BABYLON.Mesh} - Malla del video
  */
 function createVideo(heigh, width, title, url, scene) {
-
     const videoMesh = BABYLON.MeshBuilder.CreatePlane(`videoMesh_${title}`, {
         height: heigh * 0.01, 
         width: width * 0.01, 
@@ -428,7 +415,6 @@ function createVideo(heigh, width, title, url, scene) {
     });
     
     return videoMesh;
-
 }
 
 /**
@@ -443,7 +429,6 @@ function createVideo(heigh, width, title, url, scene) {
  * @returns {Promise<BABYLON.Sound>} A promise that resolves with the created audio object.
  */
 async function createAudio(name, url, scene, autoPlay, loop, spatialSound, maxDistance) {
-
     const urlSplit = url.split('?');
 
     const newURL = url + urlSplit[0];
@@ -475,7 +460,6 @@ async function createAudio(name, url, scene, autoPlay, loop, spatialSound, maxDi
  * @returns {Promise<[BABYLON.WebXRExperienceHelper, GUI.Button]>} A promise that resolves to an array containing the XR experience helper and the XR mode button.
  */
 async function createXR(ground, skybox, scene) {
-
     let avaliableVR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-vr")
     let avaliableAR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-ar")
 
@@ -648,7 +632,6 @@ async function createXR(ground, skybox, scene) {
     advancedTextureFullScreen.addControl(btnModoXR)
 
     return [xr, btnModoXR]
-
 }
 
 export { createWindow, createTest, createVideo, createXR, createAudio, createImage };
