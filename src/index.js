@@ -41,6 +41,7 @@ const createBar = (width, heighW, title, scene) => {
     barText.fontSize = "20%";
     barText.textWrapping = true;
     barText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    barText.scaleY = 4;
 
     barGrid.addControl(barText, 0, 0);
 
@@ -79,6 +80,8 @@ const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
     playButton.textWrapping = true;
     playButton.fontFamily = "Helvetica";
 
+    playButton.children[0].scaleY = 4;
+
     const omiteButton = GUI.Button.CreateSimpleButton(`omiteButton`);
     omiteButton.textBlock.text = "Omitir";
     omiteButton.color = "white";
@@ -86,6 +89,8 @@ const createControls = (width, heightW, videoMesh, videoTexture, scene) => {
     omiteButton.fontSize = "10%";
     omiteButton.textWrapping = true;
     omiteButton.fontFamily = "Helvetica";
+
+    omiteButton.children[0].scaleY = 4;
 
     playButton.onPointerClickObservable.add(() => {
 
