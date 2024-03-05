@@ -38,8 +38,8 @@ const createBar = (width, heighW, title, scene) => {
     barText.fontFamily = "Helvetica";
     barText.text = title;
     barText.color = "white";
-    barText.fontSize = "20%";
-    barText.textWrapping = true;
+    barText.fontSize = "10%";
+    barText.textWrapping = GUI.TextWrapping.Ellipsis;;
     barText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     barText.scaleY = 4;
 
@@ -198,7 +198,7 @@ function createWindow(heigh, width, title, text, showButton, scene) {
     windowText.fontFamily = "Helvetica";
     windowText.text = text;
     windowText.color = "black";
-    windowText.fontSize = 70;
+    windowText.fontSize = "10%";
     windowText.textWrapping = true;
 
     if(showButton) {
@@ -207,7 +207,7 @@ function createWindow(heigh, width, title, text, showButton, scene) {
         windowButton.fontFamily = "Helvetica";
         windowButton.color = "black";
         windowButton.background = "#2acaea";
-        windowButton.fontSize = 50;
+        windowButton.fontSize = "80%";
         windowButton.borderColor = "black";
         windowButton.cornerRadius = 20;
         windowButton.width = "80%";
@@ -269,7 +269,7 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
     testText.fontFamily = "Helvetica";
     testText.text = question;
     testText.color = "black";
-    testText.fontSize = 70;
+    testText.fontSize = "20%";
     testText.textWrapping = true;
 
     const testAnswersGrid = new GUI.Grid(`testAnswersGrid_${title}`);
@@ -286,14 +286,14 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
         answerLabel.fontFamily = "Helvetica";
         answerLabel.text = answers[i];
         answerLabel.color = "black";
-        answerLabel.fontSize = 50;
+        answerLabel.fontSize = "80%";
         answerLabel.textWrapping = true;
         answerLabel.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         answerLabel.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
         const answerRadioButton = new GUI.RadioButton(`answerRadioButton_${title}_${i}`);
-        answerRadioButton.width = "40px";
-        answerRadioButton.height = "40px";
+        answerRadioButton.width = "30%";
+        answerRadioButton.height = "30%";
         answerRadioButton.color = "black";
         answerRadioButton.background = "white";
         answerRadioButton.isChecked = false;
@@ -312,7 +312,7 @@ function createTest(heigh, width, title, question, correct_answer, correct_messa
     testSubmitButton.fontFamily = "Helvetica";
     testSubmitButton.color = "black";
     testSubmitButton.background = "#2acaea";
-    testSubmitButton.fontSize = 50;
+    testSubmitButton.fontSize = "80%";
     testSubmitButton.borderColor = "black";
     testSubmitButton.cornerRadius = 20;
     testSubmitButton.width = "80%";
